@@ -22,14 +22,14 @@ const { list, containerProps: container_props, wrapperProps: wrapper_props } = u
     },
 )
 
-const { arrivedState } = useScroll(document, {
+const { arrivedState: arrived_state } = useScroll(document, {
     throttle: 100,
     behavior: 'smooth'
 })
 
 
 watchEffect(() => {
-    if (arrivedState.bottom) {
+    if (arrived_state.bottom) {
         should_fetch.page++;
     }
 })
