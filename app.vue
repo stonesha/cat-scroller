@@ -1,6 +1,7 @@
 <script setup lang="ts">
-const { data: cat_pictures } = await useFetch('/api/get-cat-pictures')
+const { data } = await useFetch('/api/get-cat-pictures')
 
+const cat_pictures = computed(() => data.value ? data.value : [])
 </script>
 
 <template>
