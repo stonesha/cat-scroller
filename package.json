@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@planetscale/database": "^1.11.0",
+    "@vueuse/core": "^10.6.0",
     "drizzle-orm": "^0.28.6"
   }
 }
