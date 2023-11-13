@@ -1,5 +1,9 @@
 <script setup lang="ts">
-import { useVirtualList } from '@vueuse/core'
+import { useVirtualList, useScroll } from '@vueuse/core'
+import { use_should_fetch_store } from '@/stores/should_fetch'
+
+const should_fetch = use_should_fetch_store();
+
 const props = defineProps<{
     cat_pictures: {
         reddit_id: string;
@@ -17,6 +21,18 @@ const { list, containerProps: container_props, wrapperProps: wrapper_props } = u
         overscan: 5
     },
 )
+
+const { arrivedState } = useScroll(document, {
+    throttle: 100,
+    behavior: 'smooth'
+})
+
+
+watchEffect(() => {
+    if (arrivedState.bottom) {
+        should_fetch.page++;
+    }
+})
 </script>
 
 <template>
