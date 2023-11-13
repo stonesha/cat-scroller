@@ -8,5 +8,5 @@ defineProps<{
 </script>
 
 <template>
-    <img :src="media" :alt="title" class="w-3/4 h-auto rounded-md" />
+    <img :src="media" :alt="title" class="w-3/4 h-auto rounded-md m-4" />
 </template>
