@@ -6,22 +6,23 @@ import type { CatPictures } from '@/db/schema';
 const should_fetch = use_should_fetch_store();
 const cat_pictures = use_cat_pictures_store();
 
-const { data } = await useFetch("/api/get-cat-pictures", {
+const fetch_cat_pictures = async () => await useFetch("/api/get-cat-pictures", {
   query: {
     page: should_fetch.page
   },
   transform(data: CatPictures[]) {
     return data
+  },
+  onResponse({ response }) {
+    cat_pictures.push(response._data);
   }
 });
 
-cat_pictures.push(data.value);
+await fetch_cat_pictures()
 
 watchEffect(async () => {
-  if (should_fetch.page) {
-    const data = await fetch(`/api/get-cat-pictures?page=${should_fetch.page}`).then(res => res.json());
-
-    cat_pictures.value.push(...data);
+  if (should_fetch.page && should_fetch.page !== 1) {
+    await fetch_cat_pictures()
   }
 })
 </script>
