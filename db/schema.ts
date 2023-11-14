@@ -1,3 +1,4 @@
+import type { InferSelectModel } from "drizzle-orm";
 import { int, mysqlTable, timestamp, varchar } from "drizzle-orm/mysql-core";
 
 export const cat_pictures = mysqlTable("cat_pictures", {
@@ -8,3 +9,5 @@ export const cat_pictures = mysqlTable("cat_pictures", {
   media: varchar("media", { length: 255 }).notNull(),
   source: varchar("source", { length: 255 }).notNull(),
 });
+
+export type CatPictures = InferSelectModel<typeof cat_pictures>;

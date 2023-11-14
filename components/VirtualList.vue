@@ -1,23 +1,16 @@
 <script setup lang="ts">
 import { useVirtualList, useScroll } from '@vueuse/core'
 import { use_should_fetch_store } from '@/stores/should_fetch'
+import { use_cat_pictures_store } from '@/stores/cat_pictures';
 
 const should_fetch = use_should_fetch_store();
-
-const props = defineProps<{
-    cat_pictures: {
-        reddit_id: string;
-        media: string;
-        source: string;
-        title: string;
-    }[]
-}>()
+const cat_pictures = use_cat_pictures_store();
 
 // snakecase ftw
 const { list, containerProps: container_props, wrapperProps: wrapper_props } = useVirtualList(
-    props.cat_pictures,
+    cat_pictures.value,
     {
-        itemHeight: 500,
+        itemHeight: (index) => cat_pictures.get_height(index),
         overscan: 5
     },
 )
@@ -37,7 +30,7 @@ watchEffect(() => {
 
 <template>
     <div v-bind="container_props" class="h-full p-2">
-        <div v-bind="wrapper_props">
+        <div v-bind="wrapper_props" class="flex flex-col items-center">
             <CatImg :reddit_id="data.reddit_id" :media="data.media" :source="data.source" :title="data.title"
                 v-for="{ data } in list" />
         </div>

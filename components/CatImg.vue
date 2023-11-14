@@ -1,13 +1,22 @@
 <script setup lang="ts">
-import { useImage } from '@vueuse/core'
+import { useElementSize, useImage } from '@vueuse/core'
+import { use_cat_pictures_store } from '@/stores/cat_pictures'
 const props = defineProps<{
     reddit_id: string;
     media: string;
     source: string;
     title: string;
 }>()
+const cat_pictures = use_cat_pictures_store();
 
-const { isLoading, error } = useImage({ src: props.media })
+const img_el = ref<HTMLImageElement | null>(null);
+const { height } = useElementSize(img_el)
+cat_pictures.set_height(props.reddit_id, height.value)
+
+const err = ref(false);
+const { isLoading, error } = useImage({ src: props.media }, {
+    onError: () => err.value = true
+})
 </script>
 
 <template>
@@ -24,7 +33,7 @@ const { isLoading, error } = useImage({ src: props.media })
         <span class="sr-only">Loading...</span>
     </div>
 
-    <div v-else-if="error"></div>
+    <div v-else-if="error || err"></div>
 
-    <img v-else :src="props.media" :alt="props.title" class="w-3/4 h-auto rounded-md m-4" />
+    <img v-else ref="img_el" :src="props.media" :alt="props.title" class="w-3/4 h-auto rounded-md m-4" />
 </template>
