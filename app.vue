@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { use_should_fetch_store } from '@/stores/should_fetch'
-import { use_cat_pictures_store } from '#imports';
 import type { CatPictures } from '@/db/schema';
 
 const should_fetch = use_should_fetch_store();
@@ -36,4 +34,5 @@ watchEffect(async () => {
       <VirtualList />
     </client-only>
   </div>
+  <ScrollToTop />
 </template>

@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import { useVirtualList, useScroll } from '@vueuse/core'
-import { use_should_fetch_store } from '@/stores/should_fetch'
-import { use_cat_pictures_store } from '@/stores/cat_pictures';
 
 const should_fetch = use_should_fetch_store();
 const cat_pictures = use_cat_pictures_store();
+const scroll_button = use_scroll_button_store();
 
 // snakecase ftw
 const { list, containerProps: container_props, wrapperProps: wrapper_props } = useVirtualList(
@@ -16,14 +15,22 @@ const { list, containerProps: container_props, wrapperProps: wrapper_props } = u
 )
 
 const { arrivedState: arrived_state } = useScroll(document, {
-    throttle: 100,
     behavior: 'smooth'
 })
 
+const { y } = useScroll(container_props.ref, {
+    behavior: 'smooth'
+})
 
 watchEffect(() => {
     if (arrived_state.bottom) {
         should_fetch.page++;
+    }
+
+    if (y.value > 0) {
+        scroll_button.show = true;
+    } else if (y.value === 0) {
+        scroll_button.show = false;
     }
 })
 </script>
